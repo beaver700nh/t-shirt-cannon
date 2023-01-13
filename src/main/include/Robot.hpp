@@ -1,14 +1,13 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 #pragma once
 
-#include <optional>
-
+#include <frc/Joystick.h>
+#include <frc/drive/DifferentialDrive.h>
 #include <frc/TimedRobot.h>
-#include <frc2/command/CommandPtr.h>
+#include <frc/motorcontrol/MotorControllerGroup.h>
 
+#include <ctre/phoenix/motorcontrol/can/VictorSPX.h>
+
+#include "subsystems/Drive.hpp"
 #include "RobotContainer.h"
 
 class Robot : public frc::TimedRobot {
@@ -66,4 +65,17 @@ public:
 
 private:
   RobotContainer container;
+
+  frc::XboxController controller {0};
+
+  using ctre::phoenix::motorcontrol::can::VictorSPX;
+
+  Drive drive {
+    DriveConfig {
+      new frc::MotorControllerGroup(VictorSPX(1), VictorSPX(2)),
+      new frc::MotorControllerGroup(VictorSPX(3), VictorSPX(4)),
+      true, false, 0.04, 0.04,
+      controller.LeftTrigger, controller.RightTrigger
+    }
+  };
 };
