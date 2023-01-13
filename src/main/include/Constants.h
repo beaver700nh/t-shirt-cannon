@@ -15,7 +15,9 @@
  */
 
 namespace OperatorConstants {
+  constexpr int kDriverControllerPort = 0;
+}
 
-constexpr int kDriverControllerPort = 0;
-
-}  // namespace OperatorConstants
+namespace UtilConstants {
+  constexpr int DEBUG_PRINT_STR_MAX_LEN = 256;
+}
