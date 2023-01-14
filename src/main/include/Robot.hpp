@@ -84,7 +84,7 @@ private:
   Drive drive {
     DriveConfig {
       &motor_controller_l, &motor_controller_r,
-      true, false,
+      false, true,
       0.04, 0.04
     }
   };

@@ -28,6 +28,6 @@ void Drive::set_power(double x, double r) {
     cur_r = fmax(r, cur_r - config.ramp_r);
   }
 
-  config.ctrl_l->Set(cur_x + cur_r);
-  config.ctrl_r->Set(cur_x - cur_r);
+  config.ctrl_l->Set(cur_x - cur_r);
+  config.ctrl_r->Set(cur_x + cur_r);
 }

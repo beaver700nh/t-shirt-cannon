@@ -36,8 +36,8 @@ void Robot::TeleopInit() {
 
 void Robot::TeleopPeriodic() {
   drive.set_power(
-    controller.GetLeftTriggerAxis(),
-    controller.GetRightTriggerAxis()
+    controller.GetRightTriggerAxis() - controller.GetLeftTriggerAxis(),
+    controller.GetLeftX()
   );
 }
 
