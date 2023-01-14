@@ -4,10 +4,14 @@
 #include <frc/drive/DifferentialDrive.h>
 #include <frc/TimedRobot.h>
 #include <frc/motorcontrol/MotorControllerGroup.h>
+#include <frc/Solenoid.h>
+#include <frc/PneumaticsModuleType.h>
 
 #include <ctre/phoenix/motorcontrol/can/WPI_VictorSPX.h>
 
 #include "subsystems/Drive.hpp"
+#include "subsystems/Launch.hpp"
+
 #include "RobotContainer.h"
 
 class Robot : public frc::TimedRobot {
@@ -68,18 +72,18 @@ private:
 
   frc::XboxController controller {0};
 
-  frc::MotorControllerGroup motor_controller_l = frc::MotorControllerGroup(
+  frc::MotorControllerGroup motor_controller_l {
     std::vector<std::reference_wrapper<frc::MotorController>> {
       *(frc::MotorController *) new ctre::phoenix::motorcontrol::can::WPI_VictorSPX {1},
       *(frc::MotorController *) new ctre::phoenix::motorcontrol::can::WPI_VictorSPX {2}
     }
-  );
-  frc::MotorControllerGroup motor_controller_r = frc::MotorControllerGroup(
+  };
+  frc::MotorControllerGroup motor_controller_r {
     std::vector<std::reference_wrapper<frc::MotorController>> {
       *(frc::MotorController *) new ctre::phoenix::motorcontrol::can::WPI_VictorSPX {3},
       *(frc::MotorController *) new ctre::phoenix::motorcontrol::can::WPI_VictorSPX {4}
     }
-  );
+  };
 
   Drive drive {
     DriveConfig {
@@ -88,4 +92,6 @@ private:
       0.04, 0.04
     }
   };
+
+  Launch launch;
 };

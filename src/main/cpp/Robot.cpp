@@ -1,11 +1,11 @@
-#include <frc2/command/CommandScheduler.h>
+#include <chrono>
 
-#include "Util.hpp"
+#include <frc2/command/CommandScheduler.h>
 
 #include "Robot.hpp"
 
 void Robot::RobotInit() {
-  print("Robot initialized.\n");
+  // nothing
 }
 
 void Robot::RobotPeriodic() {
@@ -13,8 +13,10 @@ void Robot::RobotPeriodic() {
 }
 
 void Robot::DisabledInit() {
-  print("Robot disabled.\n");
   drive.stop_power();
+
+  // NEVER REMOVE THIS:
+  launch.stop();
 }
 
 void Robot::DisabledPeriodic() {
@@ -22,7 +24,7 @@ void Robot::DisabledPeriodic() {
 }
 
 void Robot::AutonomousInit() {
-  print("Autonomous running.\n");
+  // nothing
 }
 
 void Robot::AutonomousPeriodic() {
@@ -30,8 +32,10 @@ void Robot::AutonomousPeriodic() {
 }
 
 void Robot::TeleopInit() {
-  print("Teleop started.\n");
   drive.configure_motors();
+
+  // NEVER REMOVE THIS:
+  launch.stop();
 }
 
 void Robot::TeleopPeriodic() {
@@ -39,6 +43,22 @@ void Robot::TeleopPeriodic() {
     controller.GetRightTriggerAxis() - controller.GetLeftTriggerAxis(),
     controller.GetLeftX()
   );
+
+  if (controller.GetAButton()) {
+    launch.launch();
+  }
+
+  auto now = std::chrono::duration_cast<std::chrono::milliseconds>(
+    std::chrono::system_clock::now().time_since_epoch()
+  );
+
+  if ((now - launch.launch_start_time) > launch.LAUNCH_LENGTH) {
+    launch.stop();
+  }
+
+  if (controller.GetAButtonReleased()) {
+    launch.enable_launch();
+  }
 }
 
 void Robot::TestPeriodic() {
