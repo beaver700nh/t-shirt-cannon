@@ -5,7 +5,7 @@
 #include <frc/TimedRobot.h>
 #include <frc/motorcontrol/MotorControllerGroup.h>
 
-#include <ctre/phoenix/motorcontrol/can/VictorSPX.h>
+#include <ctre/phoenix/motorcontrol/can/WPI_VictorSPX.h>
 
 #include "subsystems/Drive.hpp"
 #include "RobotContainer.h"
@@ -68,14 +68,24 @@ private:
 
   frc::XboxController controller {0};
 
-  using ctre::phoenix::motorcontrol::can::VictorSPX;
+  frc::MotorControllerGroup motor_controller_l = frc::MotorControllerGroup(
+    std::vector<std::reference_wrapper<frc::MotorController>> {
+      *(frc::MotorController *) new ctre::phoenix::motorcontrol::can::WPI_VictorSPX {1},
+      *(frc::MotorController *) new ctre::phoenix::motorcontrol::can::WPI_VictorSPX {2}
+    }
+  );
+  frc::MotorControllerGroup motor_controller_r = frc::MotorControllerGroup(
+    std::vector<std::reference_wrapper<frc::MotorController>> {
+      *(frc::MotorController *) new ctre::phoenix::motorcontrol::can::WPI_VictorSPX {3},
+      *(frc::MotorController *) new ctre::phoenix::motorcontrol::can::WPI_VictorSPX {4}
+    }
+  );
 
   Drive drive {
     DriveConfig {
-      new frc::MotorControllerGroup(VictorSPX(1), VictorSPX(2)),
-      new frc::MotorControllerGroup(VictorSPX(3), VictorSPX(4)),
-      true, false, 0.04, 0.04,
-      controller.LeftTrigger, controller.RightTrigger
+      &motor_controller_l, &motor_controller_r,
+      true, false,
+      0.04, 0.04
     }
   };
 };

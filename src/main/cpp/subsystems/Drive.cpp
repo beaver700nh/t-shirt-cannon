@@ -1,4 +1,4 @@
-#include "Drive.hpp"
+#include "subsystems/Drive.hpp"
 
 Drive::Drive(DriveConfig config) {
   this->config = config;
@@ -7,10 +7,6 @@ Drive::Drive(DriveConfig config) {
 void Drive::configure_motors() {
   config.ctrl_l->SetInverted(config.invert_l);
   config.ctrl_r->SetInverted(config.invert_r);
-}
-
-void Drive::update_power() {
-  set_power(config.power_x(), config.power_r());
 }
 
 void Drive::stop_power() {

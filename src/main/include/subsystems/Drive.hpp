@@ -10,8 +10,6 @@ struct DriveConfig {
   frc::MotorController *ctrl_l, *ctrl_r;
   bool invert_l, invert_r;
   double ramp_x, ramp_r;
-
-  std::function<double ()> power_x, power_r;
 };
 
 class Drive : public frc2::SubsystemBase {

@@ -14,6 +14,7 @@ void Robot::RobotPeriodic() {
 
 void Robot::DisabledInit() {
   print("Robot disabled.\n");
+  drive.stop_power();
 }
 
 void Robot::DisabledPeriodic() {
@@ -30,10 +31,14 @@ void Robot::AutonomousPeriodic() {
 
 void Robot::TeleopInit() {
   print("Teleop started.\n");
+  drive.configure_motors();
 }
 
 void Robot::TeleopPeriodic() {
-
+  drive.set_power(
+    controller.GetLeftTriggerAxis(),
+    controller.GetRightTriggerAxis()
+  );
 }
 
 void Robot::TestPeriodic() {
