@@ -1,4 +1,5 @@
 #include <chrono>
+#include <math>
 
 #include <frc2/command/CommandScheduler.h>
 
@@ -41,7 +42,7 @@ void Robot::TeleopInit() {
 void Robot::TeleopPeriodic() {
   drive.set_power(
     controller.GetRightTriggerAxis() - controller.GetLeftTriggerAxis(),
-    controller.GetLeftX()
+    std::abs(controller.GetLeftX()) < 0.1 ? 0 : controller.GetLeftX()
   );
 
   if (controller.GetAButton()) {
