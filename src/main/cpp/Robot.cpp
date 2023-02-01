@@ -1,9 +1,11 @@
 #include <chrono>
-#include <math>
+#include <cmath>
 
 #include <frc2/command/CommandScheduler.h>
 
 #include "Robot.hpp"
+
+ADIS16470_IMU imu = new ADIS16470_IMU()
 
 void Robot::RobotInit() {
   // nothing
@@ -26,6 +28,7 @@ void Robot::DisabledPeriodic() {
 
 void Robot::AutonomousInit() {
   // nothing
+  container
 }
 
 void Robot::AutonomousPeriodic() {
