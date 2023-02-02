@@ -6,6 +6,7 @@
 #include <frc/motorcontrol/MotorControllerGroup.h>
 #include <frc/Solenoid.h>
 #include <frc/PneumaticsModuleType.h>
+#include <frc/ADIS16470_IMU.h>
 
 #include <ctre/phoenix/motorcontrol/can/WPI_VictorSPX.h>
 
@@ -69,6 +70,8 @@ public:
 
 private:
   RobotContainer container;
+
+  frc::ADIS16470_IMU imu;
 
   frc::XboxController controller {0};
 

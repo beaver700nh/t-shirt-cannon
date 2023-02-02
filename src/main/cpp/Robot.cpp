@@ -1,11 +1,11 @@
 #include <chrono>
 #include <cmath>
 
+#include <frc/SmartDashboard/SmartDashboard.h>
+
 #include <frc2/command/CommandScheduler.h>
 
 #include "Robot.hpp"
-
-ADIS16470_IMU imu = new ADIS16470_IMU()
 
 void Robot::RobotInit() {
   // nothing
@@ -28,7 +28,6 @@ void Robot::DisabledPeriodic() {
 
 void Robot::AutonomousInit() {
   // nothing
-  container
 }
 
 void Robot::AutonomousPeriodic() {
@@ -43,11 +42,6 @@ void Robot::TeleopInit() {
 }
 
 void Robot::TeleopPeriodic() {
-  drive.set_power(
-    controller.GetRightTriggerAxis() - controller.GetLeftTriggerAxis(),
-    std::abs(controller.GetLeftX()) < 0.1 ? 0 : controller.GetLeftX()
-  );
-
   if (controller.GetAButton()) {
     launch.launch();
   }
@@ -63,6 +57,42 @@ void Robot::TeleopPeriodic() {
   if (controller.GetAButtonReleased()) {
     launch.enable_launch();
   }
+
+  if (controller.GetBButtonReleased()) {
+    drive.reset_pid();
+  }
+
+  if (controller.GetXButtonReleased()) {
+    drive.toggle_auto_balance();
+  }
+
+  double pitch = imu.GetXFilteredAccelAngle().value();
+
+  if (pitch > 180) {
+    pitch -= 360;
+  }
+
+  if (controller.GetYButtonReleased()) {
+    drive.set_zero_point(pitch);
+    drive.reset_pid();
+  }
+
+  double p = frc::SmartDashboard::GetNumber("tilt_p", 0.0125);
+  double i = frc::SmartDashboard::GetNumber("tilt_i", 0.0);
+  double d = frc::SmartDashboard::GetNumber("tilt_d", 0.0);
+  drive.set_pid(p, i, d);
+
+  frc::SmartDashboard::PutBoolean("aubal", drive.aubal_enabled);
+  frc::SmartDashboard::PutNumber("pitch", pitch - drive.get_zero_point());
+
+  double aubal_x = 0;
+
+  drive.do_auto_balance(pitch, &aubal_x);
+
+  drive.set_power(
+    controller.GetRightTriggerAxis() - controller.GetLeftTriggerAxis() - aubal_x,
+    std::abs(controller.GetLeftX()) < 0.1 ? 0 : controller.GetLeftX()
+  );
 }
 
 void Robot::TestPeriodic() {
